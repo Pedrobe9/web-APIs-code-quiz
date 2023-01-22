@@ -1,3 +1,5 @@
+/*In order to complete this challenge, the exercise completed in class '07-Stu-Word-Guess'
+has been used as referent.*/
 // Access elements
 var timerElement = document.querySelector("#time");
 var startButton = document.querySelector("#start");
@@ -5,6 +7,9 @@ var questionElement = document.querySelector("#question-title");
 var choicesElement = document.querySelector("#choices");
 var finalScoreSpan = document.querySelector("#final-score");
 var initialsInput = document.querySelector("#initials");
+
+// Use questions.js to store the questions and answers.
+console.log(questions[1]);
 
 // global variables
 var rightQuestion = false;
@@ -44,4 +49,18 @@ function startTimer() {
         loseQuiz();
       }
     }, 1000);
+}
+
+function displayQuiz() {
+questionElement.textContent = 0;
+}
+
+
+// When timer reaches 0, loseQuiz function is called.
+// Start button is activated again.
+function loseQuiz() {
+    wordBlank.textContent = "GAME OVER";
+    loseCounter++
+    startButton.disabled = false;
+    
   }
