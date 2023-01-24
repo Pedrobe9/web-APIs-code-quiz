@@ -182,12 +182,21 @@ function getInitials(event) {
             endQuiz();
           }, "3000");        
     } else {
+        var storedScore = [];
+        var recordTotalScore = [];
+        storedScore = JSON.parse(localStorage.getItem("recordTotalScore"));
+        // If todos were retrieved from localStorage, update the todos array to it
+        if (storedScore !== null) {
+            recordTotalScore = storedScore;
+        }
+
         let recordScore = {initials: initials, score: score};
+        recordTotalScore.push(recordScore);
         // stringify the object
-        const recordScoreJSON = JSON.stringify(recordScore);
+        //const recordScoreJSON = JSON.stringify(recordScore);
         // store JSON in localStorage
-        localStorage.setItem("recordScore", recordScoreJSON);
-        console.log(recordScoreJSON);
+        localStorage.setItem("recordTotalScore", JSON.stringify(recordTotalScore));
+        console.log(recordTotalScore);
     }
 
 }
