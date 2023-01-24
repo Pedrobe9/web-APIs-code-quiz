@@ -48,50 +48,11 @@ function startTimer() {
             wrongQuestion = false;
         } else {
             clearInterval(timer);
+            //document.body.innerHTML = "";
             endQuiz()
         }
       
     }, 1000);
-}
-
-function startQuiz() {
-    // Hide the starting screen so the questions can be seeing.
-    //startScreen.innerHTML = "";
-    document.getElementById("start-screen").className = "hide";
-    rightQuestion = false;
-    timerCount = 60;
-    // Deactivate startButton to prevent click
-    startButton.disabled = true;
-    const index = Math.floor(Math.random() * question.length);
-    document.getElementById("questions").className = "MyClass";
-    console.log("init: ", index);
-    indexQ = index;;
-    startTimer();
-    displayQuiz(indexQ);
-}
-
-function displayQuiz(iQ) {
-    // Change hide class to show the questions
-    document.getElementById("questions").className = "myClass";
-    //questionElement.textContent = "";
-    questionElement.textContent = question[iQ];
-    var answer = multAnswer[iQ];
-    console.log(question[iQ], "---", answer);
-    console.log("after if: ", iQ);
-    for (let i = 0; i < 4; i++) {
-        
-        var li = document.createElement("li");
-        //li.textContent = multAnswer;
-        li.setAttribute("data-index", i);
-    
-        var button = document.createElement("button");
-        button.textContent = answer[i];
-    
-        li.appendChild(button);
-        choicesElement.appendChild(li);
-    
-    }
-    clickAnswer();
 }
 
 function rightMessage() {
@@ -131,10 +92,10 @@ function clickAnswer() {
                     } else {
                         indexQ = indexQ - question.length;
                     }
-                    displayQuiz(indexQ);
+                    const myTimeout = setTimeout(displayQuiz(indexQ), 2000);
+                    //displayQuiz(indexQ);
                 }   
                 
-
             } else {
                 wrongMessage();
                 const audio = new Audio("./assets/sfx/incorrect.wav");
@@ -150,28 +111,73 @@ function clickAnswer() {
                     } else {
                         indexQ = indexQ - question.length;
                     }
-                    displayQuiz(indexQ);
+                    const myTimeout = setTimeout(displayQuiz(indexQ), 2000);
+                    //displayQuiz(indexQ);
                 }   
-                
             }
         });
     }
     
 }
 
+function displayQuiz(iQ) {
+    
+    // Change hide class to show the questions
+    document.getElementById("questions").className = "myClass";
+    //questionElement.textContent = "";
+    questionElement.textContent = question[iQ];
+    var answer = multAnswer[iQ];
+    console.log(question[iQ], "---", answer);
+    console.log("after if: ", iQ);
+    for (let i = 0; i < 4; i++) {
+        
+        var li = document.createElement("li");
+        //li.textContent = multAnswer;
+        li.setAttribute("data-index", i);
+    
+        var button = document.createElement("button");
+        button.textContent = answer[i];
+    
+        li.appendChild(button);
+        choicesElement.appendChild(li);
+    
+    }
+    clickAnswer();
+}
+
+function startQuiz() {
+    // Hide the starting screen so the questions can be seeing.
+    //startScreen.innerHTML = "";
+    document.getElementById("start-screen").className = "hide";
+    rightQuestion = false;
+    timerCount = 60;
+    // Deactivate startButton to prevent click
+    //startButton.disabled = true;
+    const index = Math.floor(Math.random() * question.length);
+    document.getElementById("questions").className = "MyClass";
+    console.log("init: ", index);
+    indexQ = index;;
+    startTimer();
+    displayQuiz(indexQ);
+}
+
 
 // When timer reaches 0, endQuiz function is called.
 // Start button is activated again.
 function endQuiz() {
+    //document.body.innerHTML = "";
+    document.getElementById("questions").className = "hide";
+    document.getElementById("choices").className = "hide";
+    document.getElementById("end-screen").className = "start";
+    //const myTimeout = setTimeout(, 3000);
     console.log("Score: ", score)
     startButton.disabled = false;
-    document.getElementById("start-screen").className = "start";
-    //startScreen.innerHTML = "GAME OVER";
-    //startScreen.innerHTML = "Score: ";
-    //startScreen.innerHTML = score;
+    
+    
   }
 
 
   // Call startQuiz function with a click -associate event listener to start button
 startButton.addEventListener("click", startQuiz);
 console.log("passed");
+//function endQuiz()
