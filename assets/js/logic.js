@@ -139,7 +139,6 @@ function displayQuiz(iQ) {
     for (let i = 0; i < 4; i++) {
         
         var li = document.createElement("li");
-        //li.textContent = multAnswer;
         li.setAttribute("data-index", i);
     
         var button = document.createElement("button");
@@ -154,12 +153,10 @@ function displayQuiz(iQ) {
 
 function startQuiz() {
     // Hide the starting screen so the questions can be seeing.
-    //startScreen.innerHTML = "";
     document.getElementById("start-screen").className = "hide";
     rightQuestion = false;
     timerCount = 60;
-    // Deactivate startButton to prevent click
-    //startButton.disabled = true;
+    // start questions at random, then continue in order
     const index = Math.floor(Math.random() * question.length);
     document.getElementById("questions").className = "MyClass";
     console.log("init: ", index);
@@ -192,11 +189,10 @@ function getInitials(event) {
 
         let recordScore = {initials: initials, score: score};
         recordTotalScore.push(recordScore);
-        // stringify the object
-        //const recordScoreJSON = JSON.stringify(recordScore);
-        // store JSON in localStorage
+
+        // stringify the object and store JSON in localStorage
         localStorage.setItem("recordTotalScore", JSON.stringify(recordTotalScore));
-        console.log(recordTotalScore);
+        console.log("recordTotalScore: ", recordTotalScore);
     }
 
 }
