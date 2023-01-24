@@ -13,6 +13,8 @@ var initialsInput = document.querySelector("#initials");
 var displayQuestions = document.querySelector("#questions");
 var displayElement = document.querySelector(".hide");
 var pElement = document.createElement("p");
+var finalScore = document.querySelector("#final-score");
+var buttonElement = document.querySelector("#submit");
 
 // Use file questions.js to store the questions and answers as seein g in
 // https://stackoverflow.com/questions/41255861/how-to-pass-variable-from-one-javascript-to-another-javascript-file
@@ -33,28 +35,29 @@ var answerList;
 // start timer and check if quiz is right
 function startTimer() {
     timer = setInterval(function() {
-        // Time available decreases
+        // Time left decreases each second
         timerCount--;
         if (timerCount < 0) {
             timerCount = 0;
         }
+        //display time left on screen
         timerElement.textContent = timerCount;
         if (timerCount > 0) {
-            // if question right in time set, Clears interval
+            // if question wrong, discount 10s
             if (wrongQuestion) {
                 timerCount -= 10;
-                
             }
             wrongQuestion = false;
         } else {
+            // when time is up, stop timer and show end screen
             clearInterval(timer);
-            //document.body.innerHTML = "";
             endQuiz()
         }
       
     }, 1000);
 }
 
+//functions to show in screen message for right and wrong answers
 function rightMessage() {
     pElement.textContent = "Right Answer";
     choicesElement.appendChild(pElement);
@@ -63,56 +66,59 @@ function wrongMessage() {
     pElement.textContent = "Wrong Answer";
     choicesElement.appendChild(pElement);
 }
+
 function clickAnswer() {
-    // Check for click in list
+    // Check for click in list of posible answers
     var choicesListElement = choicesElement.childNodes;
     var answer = multAnswer[indexQ];
     for (let i = 0; i < answer.length; i++) {
         choicesListElement[i].addEventListener("click", function(event) {
             var answerClick = event.target;
             answerList = answerClick.textContent;
-            // Get its data-index value and remove the todo element from the list
-            //var indexData = choicesListElement[i].parentElement.getAttribute("data-index");
             console.log("answerList: ", answerList, "rightAnswers[indexQ]: ", rightAnswers[indexQ]);
             if (answerList === rightAnswers[indexQ]) {
+                // print message of right answer and corresponding sound
                 rightMessage();
                 /* Play audio as shown in https://dobrian.github.io/cmp/topics/sample-recording-and-
                 playback-with-web-audio-api/1.loading-and-playing-sound-files.html#:~:
                 text=Method%202%3A%20JavaScript,back%20the%20sound%20with%20the%20.*/
                 const audio = new Audio("./assets/sfx/correct.wav");
                 audio.play()
-                questionElement.textContent = "";
-                choicesElement.textContent = "";
-                //pElement.textContent = "";
+                // if right answer, increase score and index question 
                 score++;
                 indexQ++;
+                //loop question index, if it is greater that number of questions, start with 0 again
                 if (timerCount >= 0) {
                     if (indexQ < question.length) {
                         indexQ = indexQ;
                     } else {
                         indexQ = indexQ - question.length;
                     }
-                    const myTimeout = setTimeout(displayQuiz(indexQ), 2000);
-                    //displayQuiz(indexQ);
+                    //timeout will delay 2s to call the function
+                    setTimeout(() => {
+                        displayQuiz(indexQ);
+                      }, "1500");
                 }   
                 
             } else {
+                // print message error and corresponding sound
                 wrongMessage();
                 const audio = new Audio("./assets/sfx/incorrect.wav");
                 audio.play()
-                questionElement.textContent = "";
-                choicesElement.textContent = "";
-                //pElement.textContent = "";
                 wrongQuestion = true;
+                // increase index question
                 indexQ++;
+                //loop question index, if it is greater that number of questions, start with 0 again
                 if (timerCount >= 0) {
                     if (indexQ < question.length) {
                         indexQ = indexQ;
                     } else {
                         indexQ = indexQ - question.length;
                     }
-                    const myTimeout = setTimeout(displayQuiz(indexQ), 2000);
-                    //displayQuiz(indexQ);
+                    //timeout will delay 2s to call the function
+                    setTimeout(() => {
+                        displayQuiz(indexQ);
+                      }, "1500");
                 }   
             }
         });
@@ -121,7 +127,8 @@ function clickAnswer() {
 }
 
 function displayQuiz(iQ) {
-    
+    questionElement.textContent = "";
+    choicesElement.textContent = "";
     // Change hide class to show the questions
     document.getElementById("questions").className = "myClass";
     //questionElement.textContent = "";
@@ -161,19 +168,39 @@ function startQuiz() {
     displayQuiz(indexQ);
 }
 
+function getInitials(event) {
+    initialsInput
+    // When form is submitted...
+    event.preventDefault();
+    let initials = document.getElementById("initials").value;
+    initials = initials.trim().toUpperCase();
+    console.log(initials);
+    // if initials are not less than 3 letters, ask again
+    if (initials.lenght > 3 || initials === "") {
+        alert("Initials must be a maximum of 3 letters. Enter them again. The initials will be recorded capitalised.");
+        setTimeout(() => {
+            endQuiz();
+          }, "3000");        
+    } else {
+        let recordScore = {initials: initials, score: score};
+        // stringify the object
+        const recordScoreJSON = JSON.stringify(recordScore);
+        // store JSON in localStorage
+        localStorage.setItem("recordScore", recordScoreJSON);
+        console.log(recordScoreJSON);
+    }
+
+}
 
 // When timer reaches 0, endQuiz function is called.
 // Start button is activated again.
 function endQuiz() {
-    //document.body.innerHTML = "";
+    // Hide questions, multiple answers and show end screen
     document.getElementById("questions").className = "hide";
     document.getElementById("choices").className = "hide";
     document.getElementById("end-screen").className = "start";
-    //const myTimeout = setTimeout(, 3000);
-    console.log("Score: ", score)
-    startButton.disabled = false;
-    
-    
+    document.getElementById("final-score").innerHTML = score;
+    buttonElement.addEventListener("click", getInitials);
   }
 
 
