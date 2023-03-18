@@ -6,8 +6,6 @@ var startScreen = document.querySelector("#start-screen");
 var startButton = document.querySelector("#start");
 var questionElement = document.querySelector("#question-title");
 var choicesElement = document.querySelector("#choices");
-// https://www.w3schools.com/JSREF/prop_node_childnodes.asp
-var choicesListElement = choicesElement.childNodes;
 var finalScoreSpan = document.querySelector("#final-score");
 var initialsInput = document.querySelector("#initials");
 var displayQuestions = document.querySelector("#questions");
@@ -16,7 +14,7 @@ var pElement = document.createElement("p");
 var finalScore = document.querySelector("#final-score");
 var buttonElement = document.querySelector("#submit");
 
-// Use file questions.js to store the questions and answers as seein g in
+// Use file questions.js to store the questions and answers as seeing in
 // https://stackoverflow.com/questions/41255861/how-to-pass-variable-from-one-javascript-to-another-javascript-file
 
 
@@ -67,8 +65,9 @@ function wrongMessage() {
     choicesElement.appendChild(pElement);
 }
 
-function clickAnswer() {
-    // Check for click in list of posible answers
+// Check for click in list of posible answers
+function clickAnswer() { 
+    // https://www.w3schools.com/JSREF/prop_node_childnodes.asp
     var choicesListElement = choicesElement.childNodes;
     var answer = multAnswer[indexQ];
     for (let i = 0; i < answer.length; i++) {
@@ -87,14 +86,14 @@ function clickAnswer() {
                 // if right answer, increase score and index question 
                 score++;
                 indexQ++;
-                //loop question index, if it is greater that number of questions, start with 0 again
+               
                 if (timerCount >= 0) {
                     if (indexQ < question.length) {
                         indexQ = indexQ;
                     } else {
                         indexQ = indexQ - question.length;
                     }
-                    //timeout will delay 2s to call the function
+                    //timeout will delay 1.5s to call the function
                     setTimeout(() => {
                         displayQuiz(indexQ);
                       }, "1500");
@@ -127,15 +126,14 @@ function clickAnswer() {
 }
 
 function displayQuiz(iQ) {
+    //Initialise to empty strings
     questionElement.textContent = "";
     choicesElement.textContent = "";
     // Change hide class to show the questions
     document.getElementById("questions").className = "myClass";
-    //questionElement.textContent = "";
+    // Display the questions
     questionElement.textContent = question[iQ];
     var answer = multAnswer[iQ];
-    console.log(question[iQ], "---", answer);
-    console.log("after if: ", iQ);
     for (let i = 0; i < 4; i++) {
         
         var li = document.createElement("li");
@@ -145,8 +143,7 @@ function displayQuiz(iQ) {
         button.textContent = answer[i];
     
         li.appendChild(button);
-        choicesElement.appendChild(li);
-    
+        choicesElement.appendChild(li);  
     }
     clickAnswer();
 }
@@ -159,19 +156,17 @@ function startQuiz() {
     // start questions at random, then continue in order
     const index = Math.floor(Math.random() * question.length);
     document.getElementById("questions").className = "MyClass";
-    console.log("init: ", index);
+
     indexQ = index;;
     startTimer();
     displayQuiz(indexQ);
 }
 
 function getInitials(event) {
-    initialsInput
     // When form is submitted...
-    event.preventDefault();
     let initials = document.getElementById("initials").value;
     initials = initials.trim().toUpperCase();
-    console.log(initials);
+    console.log("initials:", initials);
     // if initials are not less than 3 letters, ask again
     if (initials.lenght > 3 || initials === "") {
         alert("Initials must be a maximum of 3 letters. Enter them again. The initials will be recorded capitalised.");
@@ -184,17 +179,17 @@ function getInitials(event) {
         storedScore = JSON.parse(localStorage.getItem("recordTotalScore"));
         // If todos were retrieved from localStorage, update the todos array to it
         if (storedScore !== null) {
-            recordTotalScore = storedScore;
-        }
-
+            recordTotalScore = storedScore;   
+        } 
+        // Add to array of objects to store
         let recordScore = {initials: initials, score: score};
-        recordTotalScore.push(recordScore);
+        recordTotalScore.push(recordScore); 
 
         // stringify the object and store JSON in localStorage
         localStorage.setItem("recordTotalScore", JSON.stringify(recordTotalScore));
         console.log("recordTotalScore: ", recordTotalScore);
     }
-
+    document.getElementById("initials").value = "";
 }
 
 // When timer reaches 0, endQuiz function is called.
@@ -211,5 +206,3 @@ function endQuiz() {
 
   // Call startQuiz function with a click -associate event listener to start button
 startButton.addEventListener("click", startQuiz);
-console.log("passed");
-//function endQuiz()

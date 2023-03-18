@@ -10,7 +10,9 @@ At the end of the quiz the screen will show the score obtained and the score wil
 
 ## Usage
 
-Press start in the presentation screen, read the questions and click the right answer from the options presented on screen.
+Press start in the presentation screen, read the questions and click the right answer from the options presented on screen. The link to the deplyed application is:
+https://pedrobe9.github.io/web-APIs-code-quiz/
+
 
 ![starting screen](screenshots/starting-screen.png)
 
