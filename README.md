@@ -5,7 +5,9 @@ Timed coding quiz with multiple-choice questions.
 ## Description
 
 In this project I created a quiz about basic concepts of JavaScript. The person taking the quiz will have 60 seconds to answer ten questions in the form of multiple choice questions. Each wrong question will penalise with a loss of 10 seconds in the counter. After each question is answered clicking the right answer, feedback will appear on the screen informing if the answer was right or wrong.
-
+At the end of the quiz the screen will show the score obtained and the score will be stored locally together with the initials of the user. A second page accessible clicking 'View Highscores' will show the initials and the scores recorded.
+The link to the deplyed application is:  https://pedrobe9.github.io/web-APIs-code-quiz/ 
+Ling to GitHub repository:  https://github.com/Pedrobe9/web-APIs-code-quiz  
 
 ## Usage
 
